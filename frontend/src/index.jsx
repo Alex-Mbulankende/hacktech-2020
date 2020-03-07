@@ -8,6 +8,7 @@ import "./styles/style.less";
 import configureStore, { history } from './store';
 
 import HomePage from "./containers/HomePage";
+import MapPage from "./containers/MapPage";
 
 const store = configureStore();
 
@@ -17,6 +18,7 @@ const App = () => {
       <ConnectedRouter history={history}>
         <>
           <Switch>
+            <Route path="/map" component={MapPage} />
             <Route path="/" component={HomePage} />
           </Switch>
         </>
