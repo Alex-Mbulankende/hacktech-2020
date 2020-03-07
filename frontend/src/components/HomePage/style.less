@@ -1,0 +1,58 @@
+.home-page {
+  background: url('../../assets/home-background.png');
+  color: white;
+  height: 100vh;
+  text-align: center;
+  width: 100vw;
+
+  .begin-button {
+    bottom: calc(-20vw);
+    height: 40vw;
+    margin-left: 30vw;
+    margin-right: 30vw;
+    position: absolute;
+
+    h1 {
+      bottom: 25vw;
+      position: absolute;
+      text-align: center;
+      width: 100%;
+      z-index: 10;
+    }
+
+    img {
+      animation: rotation 30s infinite linear;
+      height: 100%;
+    }
+  }
+
+  .center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+
+    .title {
+      background-image: url('../../assets/dot-grid.svg');
+      padding: 20px 20px 60px 20px;
+
+      h1 {
+        font-size: 8rem;
+      }
+
+      p {
+        font-size: 1.6rem;
+      }
+    }
+  }
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}

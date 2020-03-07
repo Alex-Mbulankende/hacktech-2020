@@ -1,11 +1,11 @@
 import React from 'react';
 
-const HomePage = () => {
+import HomePage from '../components/HomePage';
+
+const HomePageContainer = () => {
   return (
-    <div className="">
-      <h1>Hello World</h1>
-    </div>
+    <HomePage />
   );
 };
 
-export default HomePage;
+export default HomePageContainer;
