@@ -1,34 +1,35 @@
 const utils = require("./utils")
 
 async function main() {
-    let eBay = require('ebay-node-client')(utils.key, utils.secret);
+    let eBay = require('ebay-node-client')(utils.prod_key, utils.prod_secret);
 
     await getOAuthToken(eBay);
 
-    await getUserToken(eBay);
+    await setUserToken(eBay);
     
-    let item = new Item(50, {
-        'title': 'Wow I LOVE Testing',
-            'description': 'Wow I LOVE Testing. Unopened box.',
-            'aspects': {
-                'Brand': ['GoPro'],
-                'Type': ['Helmet/Action'],
-                'Storage Type': ['Removable'],
-                'Recording Definition': ['High Definition'],
-                'Media Format': ['Flash Drive (SSD)'],
-                'Optical Zoom': ['10x']
-            },
-            'brand': 'GoPro',
-            'mpn': 'CHDHX-401',
-            'imageUrls': [
-                'http://i.ebayimg.com/images/i/182196556219-0-1/s-l1000.jpg',
-                'http://i.ebayimg.com/images/i/182196556219-0-1/s-l1001.jpg',
-                'http://i.ebayimg.com/images/i/182196556219-0-1/s-l1002.jpg'
-            ]
-        }
-    );
+    // let item = new Item(50, {
+    //     'title': 'Wow I LOVE Testing',
+    //         'description': 'Wow I LOVE Testing. Unopened box.',
+    //         'aspects': {
+    //             'Brand': ['GoPro'],
+    //             'Type': ['Helmet/Action'],
+    //             'Storage Type': ['Removable'],
+    //             'Recording Definition': ['High Definition'],
+    //             'Media Format': ['Flash Drive (SSD)'],
+    //             'Optical Zoom': ['10x']
+    //         },
+    //         'brand': 'GoPro',
+    //         'mpn': 'CHDHX-401',
+    //         'imageUrls': [
+    //             'http://i.ebayimg.com/images/i/182196556219-0-1/s-l1000.jpg',
+    //             'http://i.ebayimg.com/images/i/182196556219-0-1/s-l1001.jpg',
+    //             'http://i.ebayimg.com/images/i/182196556219-0-1/s-l1002.jpg'
+    //         ]
+    //     }
+    // );
 
-    await addItem(item, eBay);
+    //await addItem(item, eBay);
+    await searchByZipCode(eBay, "US", "10001", 50, "mi");
 }
 
 async function getOAuthToken(eBay) {
@@ -44,8 +45,8 @@ async function getOAuthToken(eBay) {
     }
 }
 
-async function getUserToken(eBay) {
-    eBay.setUserToken(utils.USER_TOKEN);
+async function setUserToken(eBay) {
+    eBay.setUserToken(utils.prod_USER_token);
 }
 
 class Item {
@@ -70,6 +71,22 @@ async function addItem(item, eBay) {
         console.log('response', response);
         response = await eBay.inventory.getInventoryItems({limit: "100"});
         console.log('response ', response);
+    } catch (error) {
+        console.log('error ', error);
+        return;
+    }  
+}
+
+async function searchByZipCode(eBay, country="US", zipcode, radius=30, unit="mi"){
+    categories = ["257818", "177663", "181381", "75036"];
+    var data = {
+        category_ids: "220",
+        filter: ("pickupCountry:US,pickupPostalCode:92129,pickupRadius:25,pickupRadiusUnit:mi,deliveryOptions:{SELLER_ARRANGED_LOCAL_PICKUP}"),
+        limit: '5'
+    };
+    try {
+        var response = await eBay.browse.search(data);
+        console.log('response', response);
     } catch (error) {
         console.log('error ', error);
         return;
