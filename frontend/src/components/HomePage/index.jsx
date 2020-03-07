@@ -14,7 +14,7 @@ const HomePage = () => {
       </div>
       <div className="begin-button">
         <h1>Begin</h1>
-        <img src={planet}/>
+        <img src={planet} alt="planet"/>
       </div>
     </div>
   );
