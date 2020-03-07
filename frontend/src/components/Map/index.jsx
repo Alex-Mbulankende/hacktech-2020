@@ -12,22 +12,9 @@ export const Map = () => {
       loadModules(['esri/Map', 'esri/views/MapView', 'esri/Basemap', 'esri/layers/TileLayer', 'esri/layers/VectorTileLayer'], { css: true })
       .then(([ArcGISMap, MapView, Basemap, TileLayer, VectorTileLayer]) => {
         const basemap = new Basemap({
-           baseLayers: [
-
-             //*** ADD ***//
-             new TileLayer({
-               portalItem: {
-                 id: "1b243539f4514b6ba35e7d995890db1d" // World Hillshade
-               }
-             }),
-
-             new VectorTileLayer({
-               portalItem: {
-                 id: "d2ff12395aeb45998c1b154e25d680e5" // Forest and Parks Canvas
-               },
-               opacity: 0.5
-             })
-           ]
+          portalItem: {
+            id: "c70093e673dd417c8c57abfe900289f0"  // WGS84 Streets Vector webmap
+          }
          });
 
         const map = new ArcGISMap({
