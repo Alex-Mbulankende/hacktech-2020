@@ -6,7 +6,7 @@ import { getListings } from '../actions/ebayActions';
 const MapPageContainer = props => {
 
   const [vis, setVis] = useState(false);
-  const [ana, setAna] = useState(true);
+  const [ana, setAna] = useState(false);
 
   return (
     <MapPage
