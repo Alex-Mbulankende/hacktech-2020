@@ -109,22 +109,22 @@ async function setUserToken(eBay) {
 let categoryNames = {
     masks: "257818",
     sanitizer: "177663",
-    camping: "181381",
-    medicine: "75036"
+    camping: "159913",
+    medicine: "3193"
 }
 
 let nameForNumber = {
     "257818": "masks",
     "177663": "sanitizer",
-    "181381": "camping",
-    "75036": "medicine"
+    "159913": "camping",
+    "3193": "medicine"
 }
 
 
 async function searchByZipCode(eBay, country="US", zipcode=92129, radius=30, unit="mi", limit=3){
     // debugger
     categories = [categoryNames.masks, categoryNames.sanitizer, categoryNames.camping, categoryNames.medicine];
-    
+    let max = 0;
     try {
         let status = {}
         let catFunc = function(catId) {
@@ -139,7 +139,7 @@ async function searchByZipCode(eBay, country="US", zipcode=92129, radius=30, uni
                 let response = await eBay.browse.search(data);
                 status[catId] = response.total
                 let allData = [];
-
+                max = Math.max(response.total, max);
                 if (response.total > 0) {
                     for await (const item of response.itemSummaries) {
                         let id = item.itemId;
@@ -173,11 +173,12 @@ async function searchByZipCode(eBay, country="US", zipcode=92129, radius=30, uni
         }
         // let results = await Promise.all(categories.map(catId => catFunc(catId)()));
         console.log(`—————————`)
-        console.log(results)
+        // console.log(results)
         console.log(`——————–`)
         // var response = await eBay.browse.search(data);
+        console.log(max)
         categories.forEach(cat => {
-            firebase.database().ref(`zipcodes/${zipcode}`).child(nameForNumber[cat]).set(status[cat]/10)
+            // firebase.database().ref(`zipcodes/${zipcode}`).child(nameForNumber[cat]).set(status[cat]/max)
             console.log(`${nameForNumber[cat]} -> ${status[cat]}`)
         })
         console.log(results)
@@ -190,7 +191,7 @@ async function searchByZipCode(eBay, country="US", zipcode=92129, radius=30, uni
 
 
 router.get("/insight", async (req, res, next) => {
-    let zipcode = req.query.zip || 92129
+    let zipcode = req.query.zip || 95131
     const result = await firebase.database().ref(`zipcodes/${zipcode}`).once('value').then(async function(snapshot) {
         console.log(snapshot)
         const result2 = await snapshot.val()
@@ -209,16 +210,16 @@ router.get("/addItem", async (req, res, next) => {
     console.log(req.query)
     let title = req.query.title || "Hand Sanatizer";
     let description = req.query.description || "Use this to protect yourself from the coronavirus!";
-    let categoryID = req.query.categoryID || categoryNames.sanitizer;
+    let categoryID = categoryNames[req.query.categoryID] || categoryNames.sanitizer;
     let price = req.query.price || "3";
     let location = req.query.location || "8223 Stage Coach Place";
-    let postal_code = req.query.postal_code || "92129";
+    let postal_code = req.query.postal_code || "95131";
     let picture_url = req.query.picture_url || "https://static.grainger.com/rp/s/is/image/Grainger/38CC09_AS01?$mdmain$";
     let country = req.query.country || "US";
     let currency = req.query.currency || "USD";
     let is_new = req.query.is_new || "True";
-    let lat = req.query.lat
-    let lng = req.query.lng
+    let lat = req.query.lat || 32.96002
+    let lng = req.query.lng || -117.15013
 
     console.log(title)
     
@@ -235,6 +236,7 @@ router.get("/addItem", async (req, res, next) => {
     is_new, lat,
     lng).then(success => {
         res.status(200)
+        success["statusCode"]="200"
         res.send(success)
     }).catch(({err, response, body}) => {
         res.status(400)
@@ -252,22 +254,53 @@ function addItem(title,
     country,
     currency,
     is_new, lat, lng) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+        const result = await firebase.database().ref(`zipcodes/${postal_code}`).once('value').then(async function(snapshot) {
+            // console.log(snapshot)
+            const result2 = await snapshot.val()
+      
+            return result2;
+          });
+          console.log(result)
+        if (categoryID === categoryNames.medicine) {
+            console.log("wtf")
+        }
+        switch(categoryID) {
+            case categoryNames.camping : {
+                result["camping"] = Math.min(result["camping"] + 0.04, 1.0);
+                result["masks"] = Math.max(0, result["masks"] - 0.04);
+                result["medicine"] = Math.max(0, result["medicine"] - 0.04);
+                result["sanitizer"] = Math.max(0, result["sanitizer"] - 0.04);
+                break;
+            }
+            case categoryNames.masks : {
+                result["masks"] = Math.min(result["masks"] + 0.04, 1.0);
+                result["camping"] = Math.max(0, result["camping"] - 0.04);
+                result["medicine"] = Math.max(0, result["medicine"] - 0.04);
+                result["sanitizer"] = Math.max(0, result["sanitizer"] - 0.04);
+                break;
+            }
+            
+            case categoryNames.medicine : {
+                console.log("wowza")
+                result["medicine"] = Math.min(result["medicine"] + 0.04, 1.0);
+                result["masks"] = Math.max(0, result["masks"] - 0.04);
+                result["camping"] = Math.max(0, result["camping"] - 0.04);
+                result["sanitizer"] = Math.max(0, result["sanitizer"] - 0.04);
+                break;
+            }
+            
+            case categoryNames.sanitizer : {
+                result["sanitizer"] = Math.min(result["sanitizer"] + 0.04, 1.0);
+                result["masks"] = Math.max(0, result["masks"] - 0.04);
+                result["medicine"] = Math.max(0, result["medicine"] - 0.04);
+                result["camping"] = Math.max(0, result["camping"] - 0.04);
+                break;
+            
+            }
+        }
+        firebase.database().ref(`zipcodes/${postal_code}`).set(result)
 
-        // firebase.database().ref(`listings/v1|${110510320006}|0`).set({
-        //     title: title,
-        //     description: description,
-        //     categoryID: categoryID,
-        //     postal_code: postal_code,
-        //     price: price,
-        //     location: location,
-        //     picture_url: picture_url,
-        //     country: country,
-        //     currency: currency,
-        //     is_new: is_new,
-        //     lat: lat,
-        //     lng, lng
-        // })
 
         request.post({
             url: 'http://35.232.236.97/additem',
@@ -286,11 +319,11 @@ function addItem(title,
                 "lng": lng
             },
             json: true
-        }, function (error, response, body) {
+        }, async function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 // add to firebase too
                 let itemId = body.body.split("=").pop()
-                firebase.database().ref(`listings/v1|${itemId}|0`).set({
+                let data = {
                     title: title,
                     description: description,
                     categoryID: categoryID,
@@ -303,7 +336,48 @@ function addItem(title,
                     is_new: is_new,
                     lat: lat,
                     lng, lng
-                })
+                }
+                console.log(data)
+                firebase.database().ref(`listings/v1|${itemId}|0`).set(data)
+                const result = await firebase.database().ref(`zipcodes/${postal_code}`).once('value').then(async function(snapshot) {
+                    console.log(snapshot)
+                    const result2 = await snapshot.val()
+              
+                    return result2;
+                  });
+                  console.log(result)
+                switch(categoryID) {
+                    case categoryNames.camping : {
+                        result["camping"] = Math.min(result["camping"] + 0.1, 1.0);
+                        result["masks"] = Math.max(0, result["masks"] - 0.1);
+                        result["medicine"] = Math.max(0, result["medicine"] - 0.1);
+                        result["sanitizer"] = Math.max(0, result["sanitizer"] - 0.1);
+                    }
+                    case categoryNames.masks : {
+                        result["masks"] = Math.min(result["masks"] + 0.1, 1.0);
+                        result["camping"] = Math.max(0, result["camping"] - 0.1);
+                        result["medicine"] = Math.max(0, result["medicine"] - 0.1);
+                        result["sanitizer"] = Math.max(0, result["sanitizer"] - 0.1);
+                    }
+                    
+                    case categoryNames.medicine : {
+                        result["medicine"] = Math.min(result["medicine"] + 0.1, 1.0);
+                        result["masks"] = Math.max(0, result["masks"] - 0.1);
+                        result["camping"] = Math.max(0, result["camping"] - 0.1);
+                        result["sanitizer"] = Math.max(0, result["sanitizer"] - 0.1);
+                    }
+                    
+                    case categoryNames.sanitizer : {
+                        result["sanitizer"] = Math.min(result["sanitizer"] + 0.1, 1.0);
+                        result["masks"] = Math.max(0, result["masks"] - 0.1);
+                        result["medicine"] = Math.max(0, result["medicine"] - 0.1);
+                        result["camping"] = Math.max(0, result["camping"] - 0.1);
+                    
+                    }
+                }
+                firebase.database().ref(`zipcodes/${postal_code}`).set(result)
+                console.log(result)
+
                 resolve(body);
             } else {
                 reject({error: error, response: response, body: body})

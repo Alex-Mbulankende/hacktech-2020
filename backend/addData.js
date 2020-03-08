@@ -13,18 +13,19 @@ const keypress = async () => {
     }))
   }
 
-let categoryNames = {
+
+  let categoryNames = {
     masks: "257818",
     sanitizer: "177663",
-    camping: "16036",
-    medicine: "11779"
+    camping: "159913",
+    medicine: "3193"
 }
 
 let nameForNumber = {
     "257818": "masks",
     "177663": "sanitizer",
-    "16036": "camping",
-    "11779": "medicine"
+    "159913": "camping",
+    "3193": "medicine"
 }
 
 test()
