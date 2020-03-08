@@ -12,9 +12,9 @@ const LoginForm = (props) => {
     <Modal
       className="login-form"
       footer={null}
-      visible={true}
+      visible={props.mod}
       onOk={props.handleOk}
-      onCancel={props.handleCancel}
+      onCancel={() => props.setMod(false)}
     >
       <NavLink to="/map">
         <div className="login-button2 facebook-login">

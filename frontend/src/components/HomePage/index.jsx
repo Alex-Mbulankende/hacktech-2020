@@ -4,9 +4,11 @@ import './style.less';
 import planet from '../../assets/planet.png';
 import LoginForm from '../LoginForm';
 
-const HomePage = () => {
+const HomePage = props => {
   return (
     <div className="home-page">
+      <div className="sidecircle" />
+
       <div className="center">
         <div className="title">
           <h1>Coronally</h1>
@@ -14,10 +16,10 @@ const HomePage = () => {
         </div>
       </div>
       <div className="begin-button">
-        <h1>Begin</h1>
-        <img src={planet} alt="planet"/>
+        <h1 onClick={() => props.setMod(true)}>Begin Here</h1>
+        <img src={planet} alt="planet" />
       </div>
-      <LoginForm />
+      <LoginForm mod={props.mod} setMod={props.setMod} />
     </div>
   );
 };
