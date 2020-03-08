@@ -17,13 +17,11 @@ const NavBar = props => {
           <div className="popmodal">DONATE</div>
         </NavLink>
         <div className="popmodal" onClick={props.setVis}>
-          <div className="popmodal">
             <div className="text">CREATE LISTING</div>
-          </div>
         </div>
-        <NavLink activeClassName="selected" to="/analytics">
-          <div className="popmodal">ANALYTICS</div>
-        </NavLink>
+        <div className="popmodal" onClick={props.setAna}>
+          <div className="text">ANALYTICS</div>
+        </div>
         <NavLink activeClassName="selected" to="/profile">
           <div className="popmodal">PROFILE</div>
         </NavLink>
