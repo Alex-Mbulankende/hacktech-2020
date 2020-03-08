@@ -24,7 +24,34 @@ router.get('/listings', async function(req, res, next) {
     res.send(data)
 });
 
+router.get("/wtf", async function(req, res) {
+    let title = req.query.title || "Hand Sanatizer";
+    let description = req.query.description || "Use this to protect yourself from the coronavirus!";
+    let categoryID = req.query.categoryID || categoryNames.handSanitizer;
+    let price = req.query.price || "3";
+    let location = req.query.location || "8223 Stage Coach Place";
+    let postal_code = req.query.postal_code || "92129";
+    let picture_url = req.query.picture_url || "https://static.grainger.com/rp/s/is/image/Grainger/38CC09_AS01?$mdmain$";
+    let country = req.query.country || "US";
+    let currency = req.query.currency || "USD";
+    let is_new = req.query.is_new || "True";
+    let itemId = req.query.itemId // required
 
+    firebase.database().ref(`listings/${itemId}`).set({
+        title: title,
+        description: description,
+        categoryID: categoryID,
+        postal_code: postal_code,
+        price: price,
+        location: location,
+        picture_url: picture_url,
+        country: country,
+        currency: currency,
+        is_new: is_new
+    })
+
+    res.send(itemId)
+})
 async function getOAuthToken(eBay) {
     try {
         let token = await eBay.application.getOAuthToken({
@@ -87,7 +114,7 @@ async function searchByZipCode(eBay, country="US", zipcode=92129, radius=30, uni
                     console.log(allData)
                     return allData;
                 } else {
-                    return response
+                    return []
                 }
             }
         }
@@ -129,11 +156,11 @@ router.get("/addItem", async (req, res, next) => {
     let description = req.query.description || "Use this to protect yourself from the coronavirus!";
     let categoryID = req.query.categoryID || categoryNames.handSanitizer;
     let price = req.query.price || "3";
-    let location = req.query.location || "Via Giosuè Carducci, 50, 26845 Codogno LO, Italia";
-    let postal_code = req.query.postal_code || "26845";
+    let location = req.query.location || "8223 Stage Coach Place";
+    let postal_code = req.query.postal_code || "92129";
     let picture_url = req.query.picture_url || "https://static.grainger.com/rp/s/is/image/Grainger/38CC09_AS01?$mdmain$";
-    let country = req.query.country || "IT";
-    let currency = req.query.currency || "EUR";
+    let country = req.query.country || "US";
+    let currency = req.query.currency || "USD";
     let is_new = req.query.is_new || "True";
 
     console.log(title)
@@ -188,7 +215,7 @@ function addItem(title,
             if (!error && response.statusCode == 200) {
                 // add to firebase too
                 let itemId = body.body.split("=").pop()
-                firebase.database().ref(`v1|${itemId}|0`).set({
+                firebase.database().ref(`listings/v1|${itemId}|0`).set({
                     title: title,
                     description: description,
                     categoryID: categoryID,
