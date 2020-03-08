@@ -14,6 +14,7 @@ export const getListings = (event) => async dispatch => {
       const data = await response.json();
       if (!data) throw new Error('Empty response from server');
       if (data.error) throw new Error(data.error.message);
+      console.log('GHOAUHBIABGOUABVOIAN');
       console.log(data);
       dispatch({
         type: GET_LISTINGS,

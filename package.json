@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "antd": "^4.0.1"
+    "antd": "^4.0.1",
+    "react-live-clock": "^4.0.3"
   }
 }

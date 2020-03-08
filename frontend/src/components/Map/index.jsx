@@ -4,6 +4,8 @@ import { loadModules } from 'esri-loader';
 import './style.less';
 
 const getFeatures = (dataArray) => {
+  // console.log('wtf');
+  // console.log(dataArray);
   if ( !dataArray ) {
     return null;
   }
@@ -19,9 +21,7 @@ const getFeatures = (dataArray) => {
         },
         attributes: {
           ObjectID: i,
-          DepArpt: "Idk what this is",
           MsgTime: Date.now(),
-          FltId: "Fever1",
           title: feature.title,
           description: feature.description,
           image: feature.picture_url
@@ -40,12 +40,13 @@ export const Map = props => {
       // lazy load the required ArcGIS API for JavaScript modules and CSS
       loadModules(['esri/Map', 'esri/views/MapView', 'esri/Basemap', 'esri/layers/FeatureLayer', 'esri/layers/support/Field', 'esri/PopupTemplate'], { css: true })
       .then(([ArcGISMap, MapView, Basemap, FeatureLayer, Field, PpupTemplate]) => {
-        console.log('hi world');
-        console.log(props);
-        const masksFeatures = getFeatures(props.masksFeatures);
+        // console.log('hi world');
+        // console.log(props);
+
+        const masksFeatures = getFeatures(props.masks);
         const handSanitizerFeatures = getFeatures(props.handSanitizer);
         const campingFeatures = getFeatures(props.camping);
-        const medicineFeatures = getFeatures(props.medicineFeatures);
+        const medicineFeatures = getFeatures(props.medicine);
 
         const fields = [
          new Field({
@@ -76,6 +77,9 @@ export const Map = props => {
         const map = new ArcGISMap({
           basemap: 'dark-gray'
         });
+
+        // console.log('AIGHIAGBIAOBFIB')
+        // console.log(masksFeatures);
 
         const masksLayer = new FeatureLayer({
           source: masksFeatures,
@@ -174,16 +178,16 @@ export const Map = props => {
         };
 
         map.add(masksLayer, 0);
-        map.add(handSanitizerLayer, 0);
-        map.add(campingLayer, 0);
-        map.add(medicineLayer, 0);
+        //map.add(handSanitizerLayer, 0);
+        //map.add(campingLayer, 0);
+        //map.add(medicineLayer, 0);
 
         // load the map view at the ref's DOM node
         const view = new MapView({
           container: mapRef.current,
           map: map,
-          center: [-118, 34],
-          zoom: 8
+          center: [-121.8863, 37.3382],
+          zoom: 15
         });
 
         return () => {
