@@ -1,6 +1,6 @@
 import json
 
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, jsonify
 from add_item import add_item, Item, make_item_url
 
 app = Flask(__name__)
@@ -28,9 +28,9 @@ def add_message():
     )
     result = add_item(item.build_item())
     if result:
-        return make_response(make_item_url(result), 200)
+        return make_response(jsonify({"body": make_item_url(result)}), 200)
     else:
-        return make_response("Duplicate", 400)
+        return make_response(jsonify({"body": "Duplicate"}), 400)
 
 
 if __name__ == '__main__':
