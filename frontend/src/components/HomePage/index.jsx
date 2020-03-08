@@ -8,6 +8,10 @@ const HomePage = props => {
   return (
     <div className="home-page">
       <div className="sidecircle" />
+      <div className="sidecircle" />
+      <div className="sidecircle" />
+
+
 
       <div className="center">
         <div className="title">
