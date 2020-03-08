@@ -1,7 +1,7 @@
 import React from 'react';
 
 import NavBar from '../NavBar';
-import NewItemForm from '../NewItemForm';
+import NewItemForm from '../../containers/NewItemForm';
 import Analytics from '../Analytics';
 import Map from '../../containers/Map';
 import './style.less';

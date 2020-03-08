@@ -10,7 +10,7 @@ const StatsContainer = props => {
   }, []);
 
   return (
-    <Statistics sanitizers={props.sanitizers} masks={props.masks} camping={props.camping} medicine={props.medicine}/>
+    <Statistics onChange={props.onChange} sanitizers={props.sanitizers} masks={props.masks} camping={props.camping} medicine={props.medicine}/>
   );
 };
 

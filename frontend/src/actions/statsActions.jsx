@@ -1,4 +1,4 @@
-import { GET_STATS } from './types';
+import { GET_STATS, SET_CAT } from './types';
 
 export const getStats = (event) => async dispatch => {
   return new Promise( async (resolve, reject) => {

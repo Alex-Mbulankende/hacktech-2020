@@ -6,12 +6,10 @@ import { Progress, Radio } from 'antd';
 
 const Statistics = props => {
 
-  const [rad, setRad] = useState(1);
-
   return (
     <div className="circles">
-      <Radio.Group>
-        <Radio value={1}>
+      <Radio.Group onChange={props.onChange}>
+        <Radio value={177663}>
           <div className="item">
             <Progress
               className="circprogress"
@@ -26,7 +24,7 @@ const Statistics = props => {
             <h1>Sanitizers</h1>
           </div>
         </Radio>
-        <Radio value={2}>
+        <Radio value={257818}>
           <div className="item">
             <Progress
               className="circprogress"
@@ -41,7 +39,7 @@ const Statistics = props => {
             <h1>Masks</h1>
           </div>
         </Radio>
-        <Radio value={3}>
+        <Radio value={181381}>
           <div className="item">
             <Progress
               className="circprogress"
@@ -56,7 +54,7 @@ const Statistics = props => {
             <h1>Camping</h1>
           </div>
         </Radio>
-        <Radio value={4}>
+        <Radio value={75036}>
           <div className="item">
             <Progress
               className="circprogress"
