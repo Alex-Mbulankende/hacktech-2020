@@ -10,19 +10,24 @@ const getFeatures = (dataArray) => {
   let list = [];
   for(let i = 0; i < dataArray.length;i++ ) {
     const feature = dataArray[i]
-    list.push({
-      geometry: {
-        type: "point",
-        x: feature.lng,
-        y: feature.lat
-      },
-      attributes: {
-        ObjectID: i,
-        DepArpt: "Idk what this is",
-        MsgTime: Date.now(),
-        FltId: "Fever1"
-      }
-    })
+    if (feature.lng && feature.lat) {
+      list.push({
+        geometry: {
+          type: "point",
+          x: feature.lng,
+          y: feature.lat
+        },
+        attributes: {
+          ObjectID: i,
+          DepArpt: "Idk what this is",
+          MsgTime: Date.now(),
+          FltId: "Fever1",
+          title: feature.title,
+          description: feature.description,
+          image: feature.picture_url
+        }
+      })
+    }
   }
   return list;
 }
@@ -33,31 +38,11 @@ export const Map = props => {
   useEffect(
     () => {
       // lazy load the required ArcGIS API for JavaScript modules and CSS
-      loadModules(['esri/Map', 'esri/views/MapView', 'esri/Basemap', 'esri/layers/FeatureLayer', 'esri/layers/support/Field'], { css: true })
-      .then(([ArcGISMap, MapView, Basemap, FeatureLayer, Field]) => {
-        const masksFeatures = [{
-          geometry: {
-            type: "point",
-            x: -120,
-            y: 35
-          },
-          attributes: {
-            ObjectID: 2,
-            DepArpt: "agagag",
-            MsgTime: Date.now(),
-            FltId: "Fever1"
-          }}, {
-          geometry: {
-            type: "point",
-            x: -117.239140,
-            y: 32.959770
-          },
-          attributes: {
-            ObjectID: 3,
-            DepArpt: "WKRP",
-            MsgTime: Date.now(),
-            FltId: "Fever1"
-          }}];
+      loadModules(['esri/Map', 'esri/views/MapView', 'esri/Basemap', 'esri/layers/FeatureLayer', 'esri/layers/support/Field', 'esri/PopupTemplate'], { css: true })
+      .then(([ArcGISMap, MapView, Basemap, FeatureLayer, Field, PpupTemplate]) => {
+        console.log('hi world');
+        console.log(props);
+        const masksFeatures = getFeatures(props.masksFeatures);
         const handSanitizerFeatures = getFeatures(props.handSanitizer);
         const campingFeatures = getFeatures(props.camping);
         const medicineFeatures = getFeatures(props.medicineFeatures);
@@ -74,6 +59,10 @@ export const Map = props => {
          }), new Field ({
            name: "title",
            alias: "Title",
+           type: "string"
+         }), new Field ({
+           name: "image",
+           alias: "Image",
            type: "string"
          })
         ];
@@ -94,7 +83,8 @@ export const Map = props => {
           objectIdField: "ObjectID",  // field name of the Object IDs
           geometryType: "point",
           popupTemplate: {
-            title: 'hello'
+            title: '{title}',
+            content: '<img src={image} className="layer"/> {description}'
           }
         });
 
@@ -117,7 +107,8 @@ export const Map = props => {
           objectIdField: "ObjectID",  // field name of the Object IDs
           geometryType: "point",
           popupTemplate: {
-            title: 'hello'
+            title: '{title}',
+            content: '<img src={image} className="layer"/> {description}'
           }
         });
 
@@ -140,7 +131,8 @@ export const Map = props => {
           objectIdField: "ObjectID",  // field name of the Object IDs
           geometryType: "point",
           popupTemplate: {
-            title: 'hello'
+            title: '{title}',
+            content: '<img src={image} className="layer"/> {description}'
           }
         });
 
@@ -163,7 +155,8 @@ export const Map = props => {
           objectIdField: "ObjectID",  // field name of the Object IDs
           geometryType: "point",
           popupTemplate: {
-            title: 'hello'
+            title: '{title}',
+            content: '<img src={image} className="layer"/> {description}'
           }
         });
 
@@ -199,7 +192,7 @@ export const Map = props => {
             view.container = null;
           }
         };
-      }, []);
+      });
     }
   );
 
