@@ -191,8 +191,9 @@ export const Map = props => {
         const view = new MapView({
           container: mapRef.current,
           map: map,
-          center: [-121.905576, 37.393139],
-          zoom: 17
+          center: [-121.905576, 37.395009],
+          zoom: 17,
+          rotate: 40
         });
 
         return () => {
