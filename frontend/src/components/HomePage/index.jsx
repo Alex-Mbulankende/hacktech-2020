@@ -2,6 +2,7 @@ import React from 'react';
 import './style.less';
 
 import planet from '../../assets/planet.png';
+import LoginForm from '../LoginForm';
 
 const HomePage = () => {
   return (
@@ -14,8 +15,9 @@ const HomePage = () => {
       </div>
       <div className="begin-button">
         <h1>Begin</h1>
-        <img src={planet}/>
+        <img src={planet} alt="planet"/>
       </div>
+      <LoginForm />
     </div>
   );
 };

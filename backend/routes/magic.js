@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/listings', async function(req, res, next) {
     let zip = req.query.zip;
     let country = req.query.country;
-    let raidus = req.query.raidus;
+    let radius = req.query.radius;
     let radiusUnit = req.query.radiusUnit;
     let limit = req.query.limit;
 
@@ -19,7 +19,7 @@ router.get('/listings', async function(req, res, next) {
     
     await getOAuthToken(eBay);
     await setUserToken(eBay);
-    let data = await searchByZipCode(eBay, country, zip, raidus, radiusUnit, limit);
+    let data = await searchByZipCode(eBay, country, zip, radius, radiusUnit, limit);
     res.status(200);
     res.send(data)
 });
@@ -99,7 +99,7 @@ async function searchByZipCode(eBay, country="US", zipcode=92129, radius=30, uni
     } catch (error) {
         console.log('error ', error);
         return;
-    }  
+    }
 }
 
 module.exports = router;
