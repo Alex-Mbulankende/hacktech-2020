@@ -10,9 +10,16 @@ const MapPageContainer = props => {
   }, []);
 
   const [vis, setVis] = useState(false);
+  const [ana, setAna] = useState(false);
 
   return (
-    <MapPage listings={props.listings} setVis={setVis} vis={vis} />
+    <MapPage
+      listings={props.listings}
+      ana={ana}
+      setAna={setAna}
+      setVis={setVis}
+      vis={vis}
+    />
   );
 };
 

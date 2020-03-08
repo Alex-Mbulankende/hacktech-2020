@@ -9,9 +9,12 @@ import './style.less';
 const MapPage = props => {
   return (
     <div className="map-page">
-      <NavBar setVis={() => props.setVis(true)} />
+      <NavBar
+        setVis={() => props.setVis(true)}
+        setAna={() => props.setAna(true)}
+      />
       <Map />
-      <Analytics />
+      <Analytics ana={props.ana} setAna={() => props.setAna(false)} />
       <NewItemForm vis={props.vis} setVis={() => props.setVis(false)} />
     </div>
   );
