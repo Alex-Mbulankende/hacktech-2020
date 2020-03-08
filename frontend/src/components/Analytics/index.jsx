@@ -1,13 +1,15 @@
 import React from 'react';
 
+import './style.less';
+
 import { Form, Input, Modal } from 'antd';
 
 const Analytics = (props) => {
   return (
     <Modal
-      visible={true}
+      visible={props.ana}
       onOk={props.handleOk}
-      onCancel={props.handleCancel}
+      onCancel={props.setAna}
     >
       <form onSubmit={props.handleSubmit}>
         <Form.Item>
