@@ -14,27 +14,16 @@ const NewItemForm = props => {
       <Statistics />
       <div className="modalform">
         <form onSubmit={props.handleSubmit}>
-          <div className="row">
-            <h1 className="label">Name of item</h1>
-            <Form.Item>
-              <Input
-                name="title"
-                className="input-box"
-                value={props.values}
-                onChange={props.handleChange}
-                onBlur={props.handleBlur}
-              />
-            </Form.Item>
-            <Form.Item>
-              <Input
-                name="title"
-                className="input-box"
-                value={props.values}
-                onChange={props.handleChange}
-                onBlur={props.handleBlur}
-              />
-            </Form.Item>
-          </div>
+          <h1 className="label">Name of item</h1>
+          <Form.Item>
+            <Input
+              name="title"
+              className="input-box"
+              value={props.values}
+              onChange={props.handleChange}
+              onBlur={props.handleBlur}
+            />
+          </Form.Item>
           <h1 className="label">Drop off location</h1>
           <Form.Item>
             <Input
