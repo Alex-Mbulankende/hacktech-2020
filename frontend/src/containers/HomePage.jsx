@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import HomePage from '../components/HomePage';
 
 const HomePageContainer = () => {
+
+  const [mod, setMod] = useState(false);
+
   return (
-    <HomePage />
+    <HomePage mod={mod} setMod={setMod} />
   );
 };
 
