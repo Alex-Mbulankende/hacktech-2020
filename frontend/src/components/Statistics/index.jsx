@@ -16,7 +16,7 @@ const Statistics = props => {
             '0%': '#108ee9',
             '100%': '#87d068'
           }}
-          percent={90}
+          percent={props.sanitizers}
         />
         <h1>Sanitizers</h1>
       </div>
@@ -29,7 +29,7 @@ const Statistics = props => {
             '0%': '#108ee9',
             '100%': '#87d068'
           }}
-          percent={90}
+          percent={props.masks}
         />
         <h1>Masks</h1>
       </div>
@@ -42,7 +42,7 @@ const Statistics = props => {
             '0%': '#108ee9',
             '100%': '#87d068'
           }}
-          percent={90}
+          percent={props.camping}
         />
         <h1>Camping</h1>
       </div>
@@ -55,7 +55,7 @@ const Statistics = props => {
             '0%': '#108ee9',
             '100%': '#87d068'
           }}
-          percent={90}
+          percent={props.medicine}
         />
         <h1>Medicine</h1>
       </div>

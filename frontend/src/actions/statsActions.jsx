@@ -1,9 +1,9 @@
-import { GET_LISTINGS } from './types';
+import { GET_STATS } from './types';
 
-export const getListings = (event) => async dispatch => {
+export const getStats = (event) => async dispatch => {
   return new Promise( async (resolve, reject) => {
     try {
-      const response = await fetch('http://localhost:3000/magic/listings?zip=95131', {
+      const response = await fetch('https://44a050ab.ngrok.io/magic/insight', {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -14,18 +14,18 @@ export const getListings = (event) => async dispatch => {
       const data = await response.json();
       if (!data) throw new Error('Empty response from server');
       if (data.error) throw new Error(data.error.message);
-      console.log('GHOAUHBIABGOUABVOIAN');
+
       console.log(data);
+
       dispatch({
-        type: GET_LISTINGS,
-        masks : data[0],
-        handSanitizer: data[1],
-        camping : data[2],
-        medicine : data[3]
+        type: GET_STATS,
+        sanitizers: data.sanitizer * 100,
+        masks: data.masks * 100,
+        camping: data.camping * 100,
+        medicine: data.medicine * 100
       })
       resolve(event);
     } catch (error) {
-      console.log(error);
       reject(error);
     }
   })

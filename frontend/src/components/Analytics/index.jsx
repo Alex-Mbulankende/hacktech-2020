@@ -2,7 +2,7 @@ import React from 'react';
 import Clock from 'react-live-clock';
 
 import './style.less';
-import Statistics from '../Statistics';
+import Statistics from '../../containers/Statistics';
 import { Form, Input, Modal } from 'antd';
 
 const owo =

@@ -24,7 +24,8 @@ const getFeatures = (dataArray) => {
           MsgTime: Date.now(),
           title: feature.title,
           description: feature.description,
-          image: feature.picture_url
+          image: feature.picture_url,
+          url: feature.url
         }
       })
     }
@@ -65,6 +66,10 @@ export const Map = props => {
            name: "image",
            alias: "Image",
            type: "string"
+         }), new Field ({
+           name: "url",
+           alias: "Url",
+           type: "string"
          })
         ];
 
@@ -88,7 +93,7 @@ export const Map = props => {
           geometryType: "point",
           popupTemplate: {
             title: '{title}',
-            content: '<img src={image} className="layer"/> {description}'
+            content: '<a href={url} target="_blank"><img src={image} className="layer"/> {description}</a>'
           }
         });
 
@@ -112,7 +117,7 @@ export const Map = props => {
           geometryType: "point",
           popupTemplate: {
             title: '{title}',
-            content: '<img src={image} className="layer"/> {description}'
+            content: '<a href={url} target="_blank"><img src={image} className="layer"/> {description}</a>'
           }
         });
 
@@ -136,7 +141,7 @@ export const Map = props => {
           geometryType: "point",
           popupTemplate: {
             title: '{title}',
-            content: '<img src={image} className="layer"/> {description}'
+            content: '<a href={url} target="_blank"><img src={image} className="layer"/> {description}</a>'
           }
         });
 
@@ -160,7 +165,7 @@ export const Map = props => {
           geometryType: "point",
           popupTemplate: {
             title: '{title}',
-            content: '<img src={image} className="layer"/> {description}'
+            content: '<a href={url} target="_blank"><img src={image} className="layer"/> {description}</a>'
           }
         });
 
@@ -178,16 +183,16 @@ export const Map = props => {
         };
 
         map.add(masksLayer, 0);
-        //map.add(handSanitizerLayer, 0);
-        //map.add(campingLayer, 0);
-        //map.add(medicineLayer, 0);
+        map.add(handSanitizerLayer, 0);
+        map.add(campingLayer, 0);
+        map.add(medicineLayer, 0);
 
         // load the map view at the ref's DOM node
         const view = new MapView({
           container: mapRef.current,
           map: map,
-          center: [-121.8863, 37.3382],
-          zoom: 15
+          center: [-121.905576, 37.393139],
+          zoom: 17
         });
 
         return () => {

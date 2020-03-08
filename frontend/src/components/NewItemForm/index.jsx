@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './style.less';
-import Statistics from '../Statistics'
+import Statistics from '../../containers/Statistics'
 
 import { Button, Form, Input, Modal, Progress } from 'antd';
 
