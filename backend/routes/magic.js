@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/listings', async function(req, res, next) {
     let zip = req.query.zip;
     let country = req.query.country;
-    let radius = req.query.radius;
+    let raidus = req.query.raidus;
     let radiusUnit = req.query.radiusUnit;
     let limit = req.query.limit;
 
@@ -19,7 +19,7 @@ router.get('/listings', async function(req, res, next) {
     
     await getOAuthToken(eBay);
     await setUserToken(eBay);
-    let data = await searchByZipCode(eBay, country, zip, radius, radiusUnit, limit);
+    let data = await searchByZipCode(eBay, country, zip, raidus, radiusUnit, limit);
     res.status(200);
     res.send(data)
 });
@@ -92,14 +92,30 @@ async function searchByZipCode(eBay, country="US", zipcode=92129, radius=30, uni
 
         // var response = await eBay.browse.search(data);
         categories.forEach(cat => {
-            firebase.database().ref(`zipcodes/${zipcode}`).child(nameForNumber[cat]).set(status[cat])
+            firebase.database().ref(`zipcodes/${zipcode}`).child(nameForNumber[cat]).set(status[cat]/10)
             console.log(`${nameForNumber[cat]} -> ${status[cat]}`)
         })
         return results
     } catch (error) {
         console.log('error ', error);
         return;
-    }
+    }  
 }
 
+
+router.get("/insight", async (req, res, next) => {
+    let zipcode = req.query.zip || 92129
+    const result = await firebase.database().ref(`zipcodes/${zipcode}`).once('value').then(async function(snapshot) {
+        console.log(snapshot)
+        const result2 = await snapshot.val()
+  
+        return result2;
+      });
+
+      if (!result) {
+          res.send("No Data")
+      } else {
+        res.send(result)
+      }
+})
 module.exports = router;
