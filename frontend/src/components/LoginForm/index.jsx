@@ -49,9 +49,9 @@ const LoginForm = (props) => {
           />
         </Form.Item>
         <NavLink to="/map">
-          <div className="login-button">
+          <Button className="login-button">
             Log In
-          </div>
+          </Button>
         </NavLink>
       </form>
     </Modal>
