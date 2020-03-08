@@ -66,14 +66,14 @@ router.get("/wtf", async function(req, res) {
     let categoryID = req.query.categoryID || categoryNames.handSanitizer;
     let price = req.query.price || "3";
     let location = req.query.location || "8223 Stage Coach Place";
-    let postal_code = req.query.postal_code || "92129";
+    let postal_code = req.query.postal_code || "95131";
     let picture_url = req.query.picture_url || "https://static.grainger.com/rp/s/is/image/Grainger/38CC09_AS01?$mdmain$";
     let country = req.query.country || "US";
     let currency = req.query.currency || "USD";
     let is_new = req.query.is_new || "True";
     let itemId = req.query.itemId // required
 
-    firebase.database().ref(`listings/${itemId}`).set({
+    firebase.database().ref(`listings/v1|${itemId}|0`).set({
         title: title,
         description: description,
         categoryID: categoryID,
@@ -153,6 +153,7 @@ async function searchByZipCode(eBay, country="US", zipcode=92129, radius=30, uni
                         console.log("WOW ITS DATA")
                         console.log(data)
                         allData.push(data)
+                        data["url"] = `http://cgi.sandbox.ebay.com/ws/eBayISAPI.dll?ViewItem&item=${id.substring(3, id.length-2)}`
                     }
                     debugger
                     console.log(allData)
@@ -208,7 +209,7 @@ router.get("/addItem", async (req, res, next) => {
     console.log(req.query)
     let title = req.query.title || "Hand Sanatizer";
     let description = req.query.description || "Use this to protect yourself from the coronavirus!";
-    let categoryID = req.query.categoryID || categoryNames.handSanitizer;
+    let categoryID = req.query.categoryID || categoryNames.sanitizer;
     let price = req.query.price || "3";
     let location = req.query.location || "8223 Stage Coach Place";
     let postal_code = req.query.postal_code || "92129";
@@ -232,7 +233,7 @@ router.get("/addItem", async (req, res, next) => {
     country,
     currency,
     is_new, lat,
-    lng,).then(success => {
+    lng).then(success => {
         res.status(200)
         res.send(success)
     }).catch(({err, response, body}) => {
