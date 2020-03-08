@@ -4,7 +4,7 @@ import { notification } from 'antd';
 export const getListings = (event) => async dispatch => {
   return new Promise( async (resolve, reject) => {
     try {
-      const response = await fetch('https://44a050ab.ngrok.io/magic/listings?zip=95131&limit=60', {
+      const response = await fetch('https://9b05b6f5.ngrok.io/magic/listings?zip=95131&limit=60', {
         method: 'GET',
         headers: {
           Accept: 'application/json',
