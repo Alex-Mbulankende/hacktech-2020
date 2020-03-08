@@ -1,4 +1,5 @@
 import { GET_LISTINGS, POST_LISTING } from './types';
+import { notification } from 'antd';
 
 export const getListings = (event) => async dispatch => {
   return new Promise( async (resolve, reject) => {
@@ -47,8 +48,12 @@ export const postListing = (params) => async dispatch => {
       if (!data) throw new Error('Empty response from server');
       if (data.error) throw new Error(data.error.message);
       console.log(data)
-      if (data.statusCode === "400") {
+      if (data.statusCode == 400) {
         // toast there was a problem
+        notification.open({
+          message: 'Error',
+          description: 'Oops this listing has already been made'
+        });
       } else {
         const win = window.open(data.body, "_blank")
       }
