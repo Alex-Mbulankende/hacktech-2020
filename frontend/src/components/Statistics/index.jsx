@@ -9,7 +9,7 @@ const Statistics = props => {
   return (
     <div className="circles">
       <Radio.Group onChange={props.onChange}>
-        <Radio value={177663}>
+        <Radio value={"sanitizers"}>
           <div className="item">
             <Progress
               className="circprogress"
@@ -24,7 +24,7 @@ const Statistics = props => {
             <h1>Sanitizers</h1>
           </div>
         </Radio>
-        <Radio value={257818}>
+        <Radio value={"masks"}>
           <div className="item">
             <Progress
               className="circprogress"
@@ -39,7 +39,7 @@ const Statistics = props => {
             <h1>Masks</h1>
           </div>
         </Radio>
-        <Radio value={181381}>
+        <Radio value={"camping"}>
           <div className="item">
             <Progress
               className="circprogress"
@@ -54,7 +54,7 @@ const Statistics = props => {
             <h1>Camping</h1>
           </div>
         </Radio>
-        <Radio value={75036}>
+        <Radio value={"medicine"}>
           <div className="item">
             <Progress
               className="circprogress"

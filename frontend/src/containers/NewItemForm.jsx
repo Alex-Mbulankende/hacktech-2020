@@ -13,7 +13,7 @@ const NewItemFormContainer = withFormik({
       description: '',
       picture_url: '',
       price: '',
-      category: 0,
+      category: '',
     };
   },
   handleSubmit(values, { resetForm,  props }) {

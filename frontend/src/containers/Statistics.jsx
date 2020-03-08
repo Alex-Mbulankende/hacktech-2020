@@ -7,7 +7,7 @@ import { getStats } from '../actions/statsActions';
 const StatsContainer = props => {
   useEffect(() => {
     props.getStats();
-  }, []);
+  });
 
   return (
     <Statistics onChange={props.onChange} sanitizers={props.sanitizers} masks={props.masks} camping={props.camping} medicine={props.medicine}/>
