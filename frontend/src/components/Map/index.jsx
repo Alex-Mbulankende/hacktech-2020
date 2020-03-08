@@ -101,7 +101,7 @@ export const Map = props => {
           type: "simple",  // autocasts as new SimpleRenderer()
           symbol: {
             type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
-            size: 6,
+            size: 8,
             color: "red",
             outline: {  // autocasts as new SimpleLineSymbol()
               width: 0.5,
@@ -125,7 +125,7 @@ export const Map = props => {
           type: "simple",  // autocasts as new SimpleRenderer()
           symbol: {
             type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
-            size: 6,
+            size: 8,
             color: "yellow",
             outline: {  // autocasts as new SimpleLineSymbol()
               width: 0.5,
@@ -149,7 +149,7 @@ export const Map = props => {
           type: "simple",  // autocasts as new SimpleRenderer()
           symbol: {
             type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
-            size: 6,
+            size: 8,
             color: "green",
             outline: {  // autocasts as new SimpleLineSymbol()
               width: 0.5,
@@ -173,7 +173,7 @@ export const Map = props => {
           type: "simple",  // autocasts as new SimpleRenderer()
           symbol: {
             type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
-            size: 6,
+            size: 8,
             color: "#81cd6e",
             outline: {  // autocasts as new SimpleLineSymbol()
               width: 0.5,
