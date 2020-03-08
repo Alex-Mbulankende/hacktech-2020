@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Form, Input, Modal } from 'antd';
 
-const NewItemForm = (props) => {
+const Analytics = (props) => {
   return (
     <Modal
       visible={true}
@@ -24,4 +24,4 @@ const NewItemForm = (props) => {
   )
 }
 
-export default NewItemForm;
+export default Analytics;
