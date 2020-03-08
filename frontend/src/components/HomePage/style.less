@@ -3,7 +3,7 @@
 
   background-size: cover;
   color: white;
-  height: 120vh;
+  height: 100vh;
   text-align: center;
   width: 100vw;
 
@@ -12,13 +12,48 @@
 
   }
 
+  .sidenav {
+    left: 2.5vw;
+    top: 25vh;
+    font-size: 1.25rem;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+
+    h1 {
+      font-family: Garamond;
+      letter-spacing: .2rem;
+      margin-bottom: 5vh;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .slidestats {
+    line-height: 20px;
+    position: absolute;
+    text-align: left;
+    left: 5vh;
+    top: 2vh;
+
+    h1 {
+      font-family: "Helvetica Neue";
+      font-weight: 300;
+      font-size: 1rem;
+      letter-spacing: .2rem;
+    }
+  }
+
   .sidecircle {
     position: absolute;
     height: 500px;
     width: 500px;
     border-radius: 50%;
     top: 17.5%;
-    left: 87.5vw;  
+    left: 87.5vw;
     background-color: white;
 
     &:hover {
@@ -41,7 +76,7 @@
     h1 {
       font-family: "Helvetica Neue";
       font-size: 2rem;
-      bottom: 43.5vh;
+      margin-top: 20vh;
       position: absolute;
       text-align: center;
       width: 100%;
