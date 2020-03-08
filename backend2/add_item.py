@@ -53,7 +53,7 @@ class Item:
                 "StartPrice": self.price,
                 "ListingDuration": "GTC",
                 "Country": self.country,
-                "SiteId": "101",
+                "Site": self.country,
                 "Currency": self.currency,
                 "ShipToLocations": "None",
                 "PaymentMethods": "PayPal",
@@ -101,7 +101,7 @@ def add_item(item):
 
 
 def make_item_url(response):
-    return "http://cgi.sandbox.ebay.it/ws/eBayISAPI.dll?ViewItem&item=" + response.ItemID
+    return "http://cgi.sandbox.ebay.com/ws/eBayISAPI.dll?ViewItem&item=" + response.ItemID
 
 
 if __name__ == "__main__":
