@@ -4,6 +4,8 @@ import { loadModules } from 'esri-loader';
 import './style.less';
 
 const getFeatures = (dataArray) => {
+  // console.log('wtf');
+  // console.log(dataArray);
   if ( !dataArray ) {
     return null;
   }
@@ -19,12 +21,11 @@ const getFeatures = (dataArray) => {
         },
         attributes: {
           ObjectID: i,
-          DepArpt: "Idk what this is",
           MsgTime: Date.now(),
-          FltId: "Fever1",
           title: feature.title,
           description: feature.description,
-          image: feature.picture_url
+          image: feature.picture_url,
+          url: feature.url
         }
       })
     }
@@ -40,12 +41,13 @@ export const Map = props => {
       // lazy load the required ArcGIS API for JavaScript modules and CSS
       loadModules(['esri/Map', 'esri/views/MapView', 'esri/Basemap', 'esri/layers/FeatureLayer', 'esri/layers/support/Field', 'esri/PopupTemplate'], { css: true })
       .then(([ArcGISMap, MapView, Basemap, FeatureLayer, Field, PpupTemplate]) => {
-        console.log('hi world');
-        console.log(props);
-        const masksFeatures = getFeatures(props.masksFeatures);
+        // console.log('hi world');
+        // console.log(props);
+
+        const masksFeatures = getFeatures(props.masks);
         const handSanitizerFeatures = getFeatures(props.handSanitizer);
         const campingFeatures = getFeatures(props.camping);
-        const medicineFeatures = getFeatures(props.medicineFeatures);
+        const medicineFeatures = getFeatures(props.medicine);
 
         const fields = [
          new Field({
@@ -64,6 +66,10 @@ export const Map = props => {
            name: "image",
            alias: "Image",
            type: "string"
+         }), new Field ({
+           name: "url",
+           alias: "Url",
+           type: "string"
          })
         ];
 
@@ -77,6 +83,9 @@ export const Map = props => {
           basemap: 'dark-gray'
         });
 
+        // console.log('AIGHIAGBIAOBFIB')
+        // console.log(masksFeatures);
+
         const masksLayer = new FeatureLayer({
           source: masksFeatures,
           fields: fields,
@@ -84,7 +93,7 @@ export const Map = props => {
           geometryType: "point",
           popupTemplate: {
             title: '{title}',
-            content: '<img src={image} className="layer"/> {description}'
+            content: '<a href={url} target="_blank"><img src={image} className="layer"/> {description}</a>'
           }
         });
 
@@ -92,7 +101,7 @@ export const Map = props => {
           type: "simple",  // autocasts as new SimpleRenderer()
           symbol: {
             type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
-            size: 6,
+            size: 8,
             color: "red",
             outline: {  // autocasts as new SimpleLineSymbol()
               width: 0.5,
@@ -108,7 +117,7 @@ export const Map = props => {
           geometryType: "point",
           popupTemplate: {
             title: '{title}',
-            content: '<img src={image} className="layer"/> {description}'
+            content: '<a href={url} target="_blank"><img src={image} className="layer"/> {description}</a>'
           }
         });
 
@@ -116,7 +125,7 @@ export const Map = props => {
           type: "simple",  // autocasts as new SimpleRenderer()
           symbol: {
             type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
-            size: 6,
+            size: 8,
             color: "yellow",
             outline: {  // autocasts as new SimpleLineSymbol()
               width: 0.5,
@@ -132,7 +141,7 @@ export const Map = props => {
           geometryType: "point",
           popupTemplate: {
             title: '{title}',
-            content: '<img src={image} className="layer"/> {description}'
+            content: '<a href={url} target="_blank"><img src={image} className="layer"/> {description}</a>'
           }
         });
 
@@ -140,7 +149,7 @@ export const Map = props => {
           type: "simple",  // autocasts as new SimpleRenderer()
           symbol: {
             type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
-            size: 6,
+            size: 8,
             color: "green",
             outline: {  // autocasts as new SimpleLineSymbol()
               width: 0.5,
@@ -156,7 +165,7 @@ export const Map = props => {
           geometryType: "point",
           popupTemplate: {
             title: '{title}',
-            content: '<img src={image} className="layer"/> {description}'
+            content: '<a href={url} target="_blank"><img src={image} className="layer"/> {description}</a>'
           }
         });
 
@@ -164,11 +173,11 @@ export const Map = props => {
           type: "simple",  // autocasts as new SimpleRenderer()
           symbol: {
             type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
-            size: 6,
-            color: "blue",
+            size: 8,
+            color: "#81cd6e",
             outline: {  // autocasts as new SimpleLineSymbol()
               width: 0.5,
-              color: "blue"
+              color: "#81cd6e"
             }
           }
         };
@@ -182,8 +191,9 @@ export const Map = props => {
         const view = new MapView({
           container: mapRef.current,
           map: map,
-          center: [-118, 34],
-          zoom: 8
+          center: [-121.905576, 37.395009],
+          zoom: 17,
+          rotate: 40
         });
 
         return () => {

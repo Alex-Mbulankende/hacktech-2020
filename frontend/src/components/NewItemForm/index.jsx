@@ -1,17 +1,22 @@
 import React from 'react';
 
 import './style.less';
-import Statistics from '../Statistics'
+import Statistics from '../../containers/Statistics';
 
 import { Button, Form, Input, Modal, Progress } from 'antd';
 
 const { TextArea } = Input;
 
 const NewItemForm = props => {
+  const onStats = (e) => {
+    console.log(e.target.value);
+    props.setFieldValue('category', e.target.value);
+  }
+
   return (
     <Modal visible={props.vis} onOk={props.handleOk} onCancel={props.setVis}>
       <h1 className="newlist">List New Item</h1>
-      <Statistics />
+      <Statistics onChange={onStats}/>
       <div className="modalform">
         <form onSubmit={props.handleSubmit}>
           <h1 className="label">Name of item</h1>
@@ -19,7 +24,7 @@ const NewItemForm = props => {
             <Input
               name="title"
               className="input-box"
-              value={props.values}
+              value={props.values.title}
               onChange={props.handleChange}
               onBlur={props.handleBlur}
             />
@@ -27,29 +32,29 @@ const NewItemForm = props => {
           <h1 className="label">Drop off location</h1>
           <Form.Item>
             <Input
-              name="title"
+              name="location"
               className="input-box"
-              value={props.values}
+              value={props.values.location}
               onChange={props.handleChange}
               onBlur={props.handleBlur}
             />
           </Form.Item>
-          <h1 className="label">Price (Euros)</h1>
+          <h1 className="label">Price (USD)</h1>
           <Form.Item>
             <Input
-              name="title"
+              name="price"
               className="input-box"
-              value={props.values}
+              value={props.values.price}
               onChange={props.handleChange}
               onBlur={props.handleBlur}
             />
           </Form.Item>
-          <h1 className="label">Picture URL</h1>
+          <a href="https://imgur.com/upload" target="_blank  "><h1 className="label">Picture URL</h1></a>
           <Form.Item>
             <Input
-              name="title"
+              name="picture_url"
               className="input-box"
-              value={props.values}
+              value={props.values.picture_url}
               onChange={props.handleChange}
               onBlur={props.handleBlur}
             />
@@ -57,16 +62,14 @@ const NewItemForm = props => {
           <h1 className="label">Description</h1>
           <Form.Item>
             <TextArea
-              name="title"
+              name="description"
               className="input-box"
-              value={props.values}
+              value={props.values.description}
               onChange={props.handleChange}
               onBlur={props.handleBlur}
             />
           </Form.Item>
-          <Button className="login-button">
-            Submit
-          </Button>
+          <Button type="primary" htmlType="submit" className="login-button">Submit</Button>
         </form>
       </div>
     </Modal>

@@ -2,7 +2,7 @@ import React from 'react';
 import Clock from 'react-live-clock';
 
 import './style.less';
-import Statistics from '../Statistics';
+import Statistics from '../../containers/Statistics';
 import { Form, Input, Modal } from 'antd';
 
 const owo =
@@ -19,7 +19,7 @@ const Analytics = props => {
       onOk={props.handleOk}
       onCancel={props.setAna}
     >
-      <h1 className="newlist">Analytics Dashboard</h1>
+      <h1 className="newlist">Coronally Dashboard</h1>
       <div className="row">
         <div className="col">
           <div className="statswrapper">
