@@ -5,12 +5,48 @@ const request = require("request");
 const app = firebase.initializeApp(utils.firebaseConfig)
 const router = express.Router();
 
+async function test() {
+    const csv = require('csv-parser')
+    const fs = require('fs')
+    const results = [];
+    fs.createReadStream('./data.csv')
+    .pipe(csv())
+    .on('data', (data) => results.push(data))
+    .on('end', async () => {
+        results.forEach(item => {
+            addItem(item["title"], item["description"], categoryNames[item["category"]], item["price"], item["location"], item["postal_code"], item["picture_url"], item["country"], item["currency"], item["is_new"], item["latitude"], item["longitude"])
+            console.log(categoryNames[item["category"]])
+        })
+        const item = results[2]
+        console.log(item)
+        let data = await addItem(
+        `${item["title"].substring(0, 75) }`,
+        `${item["description"].substring(0, 75) }`,
+        `${categoryNames[item["category"]].substring(0, 75) }`,
+        `${item["price"] }`,
+        `${item["location"].substring(0, 75) }`,
+        `${item["postal_code"] }`,
+        `${item["picture_url"] }`,
+        `${item["country"] }`,
+        `${item["currency"] }`,
+        `${item["is_new"]}`,
+        `${item["latitude"]}`,
+        `${item["longitude"]}`)
+        console.log(data)
+        
+        // [
+        //   { NAME: 'Daffy Duck', AGE: '24' },
+        //   { NAME: 'Bugs Bunny', AGE: '22' }
+        // ]
+    });
+}
+
 
 /* GET home page. */
 router.get('/listings', async function(req, res, next) {
     let zip = req.query.zip;
     let country = req.query.country;
-    let raidus = req.query.raidus;
+    let raidus = req.query.radius;
     let radiusUnit = req.query.radiusUnit;
     let limit = req.query.limit;
 
@@ -52,6 +88,7 @@ router.get("/wtf", async function(req, res) {
 
     res.send(itemId)
 })
+
 async function getOAuthToken(eBay) {
     try {
         let token = await eBay.application.getOAuthToken({
@@ -71,21 +108,22 @@ async function setUserToken(eBay) {
 
 let categoryNames = {
     masks: "257818",
-    handSanitizer: "177663",
+    sanitizer: "177663",
     camping: "181381",
     medicine: "75036"
 }
 
 let nameForNumber = {
     "257818": "masks",
-    "177663": "handSanitizer",
+    "177663": "sanitizer",
     "181381": "camping",
     "75036": "medicine"
 }
 
+
 async function searchByZipCode(eBay, country="US", zipcode=92129, radius=30, unit="mi", limit=3){
     // debugger
-    categories = [categoryNames.masks, categoryNames.handSanitizer, categoryNames.camping, categoryNames.medicine];
+    categories = [categoryNames.masks, categoryNames.sanitizer, categoryNames.camping, categoryNames.medicine];
     
     try {
         let status = {}
@@ -97,6 +135,7 @@ async function searchByZipCode(eBay, country="US", zipcode=92129, radius=30, uni
                     limit: `${limit}`,
                     fieldgroups: "FULL"
                 };
+                debugger
                 let response = await eBay.browse.search(data);
                 status[catId] = response.total
                 let allData = [];
@@ -104,13 +143,18 @@ async function searchByZipCode(eBay, country="US", zipcode=92129, radius=30, uni
                 if (response.total > 0) {
                     for await (const item of response.itemSummaries) {
                         let id = item.itemId;
+                        debugger
                         let data = await firebase.database().ref(`/listings/${id}`).once('value').then(async function(snapshot) {
                             const result = await snapshot.val()
                             return result || id
+                        }).catch(async function(error) {
+                            return {}
                         })
+                        console.log("WOW ITS DATA")
                         console.log(data)
                         allData.push(data)
                     }
+                    debugger
                     console.log(allData)
                     return allData;
                 } else {
@@ -118,14 +162,24 @@ async function searchByZipCode(eBay, country="US", zipcode=92129, radius=30, uni
                 }
             }
         }
-        let results = await Promise.all(categories.map(catId => catFunc(catId)()));
-
+        debugger
+        let results = []
+        for await (const catId of categories) {
+            console.log(`starting ${nameForNumber[catId]}`)
+            results.push(await catFunc(catId)())
+            console.log(`completed ${nameForNumber[catId]}`)
+            console.log(results.slice().pop())
+        }
+        // let results = await Promise.all(categories.map(catId => catFunc(catId)()));
+        console.log(`—————————`)
+        console.log(results)
+        console.log(`——————–`)
         // var response = await eBay.browse.search(data);
         categories.forEach(cat => {
             firebase.database().ref(`zipcodes/${zipcode}`).child(nameForNumber[cat]).set(status[cat]/10)
-            // console.log(`${nameForNumber[cat]} -> ${status[cat]}`)
+            console.log(`${nameForNumber[cat]} -> ${status[cat]}`)
         })
-        // console.log(results)
+        console.log(results)
         return results
     } catch (error) {
         console.log('error ', error);
@@ -162,6 +216,8 @@ router.get("/addItem", async (req, res, next) => {
     let country = req.query.country || "US";
     let currency = req.query.currency || "USD";
     let is_new = req.query.is_new || "True";
+    let lat = req.query.lat
+    let lng = req.query.lng
 
     console.log(title)
     
@@ -175,7 +231,8 @@ router.get("/addItem", async (req, res, next) => {
     picture_url,
     country,
     currency,
-    is_new).then(success => {
+    is_new, lat,
+    lng,).then(success => {
         res.status(200)
         res.send(success)
     }).catch(({err, response, body}) => {
@@ -193,8 +250,23 @@ function addItem(title,
     picture_url,
     country,
     currency,
-    is_new) {
+    is_new, lat, lng) {
     return new Promise((resolve, reject) => {
+
+        // firebase.database().ref(`listings/v1|${110510320006}|0`).set({
+        //     title: title,
+        //     description: description,
+        //     categoryID: categoryID,
+        //     postal_code: postal_code,
+        //     price: price,
+        //     location: location,
+        //     picture_url: picture_url,
+        //     country: country,
+        //     currency: currency,
+        //     is_new: is_new,
+        //     lat: lat,
+        //     lng, lng
+        // })
 
         request.post({
             url: 'http://35.232.236.97/additem',
@@ -208,7 +280,9 @@ function addItem(title,
                 "picture_url": picture_url,
                 "country": country,
                 "currency": currency,
-                "is_new": is_new
+                "is_new": is_new,
+                "lat": lat,
+                "lng": lng
             },
             json: true
         }, function (error, response, body) {
@@ -225,7 +299,9 @@ function addItem(title,
                     picture_url: picture_url,
                     country: country,
                     currency: currency,
-                    is_new: is_new
+                    is_new: is_new,
+                    lat: lat,
+                    lng, lng
                 })
                 resolve(body);
             } else {
@@ -234,5 +310,21 @@ function addItem(title,
         });
     })    
 }
+
+router.get("/mockData", (req, res) => {
+    test()
+    res.send()
+   
+    // addItem(title,
+    //     description,
+    //     categoryID,
+    //     price,
+    //     location,
+    //     postal_code,
+    //     picture_url,
+    //     country,
+    //     currency,
+    //     is_new, lat, lng);
+}) 
 
 module.exports = router;
