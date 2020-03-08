@@ -10,7 +10,7 @@ const MapContainer = props => {
   }, []);
 
   return (
-    <Map />
+    <Map masks={props.masks} handSanitizer={props.handSanitizer} camping={props.camping} medicine={props.medicine}/>
   );
 };
 
