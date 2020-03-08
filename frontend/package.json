@@ -16,6 +16,7 @@
     "cross-env": "^7.0.2",
     "customize-cra": "^0.9.1",
     "esri-loader": "^2.13.0",
+    "formik": "^2.1.4",
     "history": "^4.10.1",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
