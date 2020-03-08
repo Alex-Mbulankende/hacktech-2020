@@ -84,7 +84,7 @@ export const Map = props => {
           geometryType: "point",
           popupTemplate: {
             title: '{title}',
-            content: '<img src={image}/> {description}'
+            content: '<img src={image} className="layer"/> {description}'
           }
         });
 
@@ -108,7 +108,7 @@ export const Map = props => {
           geometryType: "point",
           popupTemplate: {
             title: '{title}',
-            content: '<img src={image}/> {description}'
+            content: '<img src={image} className="layer"/> {description}'
           }
         });
 
@@ -132,7 +132,7 @@ export const Map = props => {
           geometryType: "point",
           popupTemplate: {
             title: '{title}',
-            content: '<img src={image}/> {description}'
+            content: '<img src={image} className="layer"/> {description}'
           }
         });
 
@@ -156,7 +156,7 @@ export const Map = props => {
           geometryType: "point",
           popupTemplate: {
             title: '{title}',
-            content: '<img src={image}/> {description}'
+            content: '<img src={image} className="layer"/> {description}'
           }
         });
 
