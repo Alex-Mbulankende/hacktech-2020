@@ -174,10 +174,10 @@ export const Map = props => {
           symbol: {
             type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
             size: 6,
-            color: "blue",
+            color: "#81cd6e",
             outline: {  // autocasts as new SimpleLineSymbol()
               width: 0.5,
-              color: "blue"
+              color: "#81cd6e"
             }
           }
         };
