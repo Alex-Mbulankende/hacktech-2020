@@ -7,21 +7,31 @@ from optparse import OptionParser
 
 sys.path.insert(0, '%s/../' % os.path.dirname(__file__))
 
-from common import dump
+from samples.common import dump
 
 import ebaysdk
 from ebaysdk.exception import ConnectionError
 from ebaysdk.trading import Connection as Trading
 
-
+"""
+Item example: 
+    item = Item(
+        title="A  cat dancing on the ground",
+        description="Well, it's dancing",
+        categoryID="257818",
+        price="500.0",
+        location="9450 Gilman Drive, La Jolla",
+        picture_url="https://static.boredpanda.com/blog/wp-content/uploads/2018/11/funny-dancing-cats-101-5bf08f6996330__700.jpg",
+    )
+"""
 class Item:
 
     def __init__(
-            self, title, description, categoryID, price, location, picture_url, country="US",
+            self, title, description, categoryID, price, location, postal_code, picture_url, country="US",
             currency="USD", is_new=True,
-
     ):
         self.location = location
+        self.postal_code = postal_code
         self.picture_url = picture_url
         self.currency = currency
         self.country = country
@@ -49,8 +59,10 @@ class Item:
                 "PaymentMethods": "PayPal",
                 "PayPalEmailAddress": "frontend@sucks.com",
                 "PictureDetails": {
-                    "PictureURL": self.picture_url},
+                    "PictureURL": self.picture_url
+                },
                 "Location": self.location,
+                "PostalCode": self.postal_code,
                 "Quantity": "1",
                 "ReturnPolicy": {
                     "ReturnsAcceptedOption": "ReturnsAccepted",
@@ -74,19 +86,12 @@ class Item:
         }
 
 
-def addItem(item):
+def add_item(item):
     """http://www.utilities-online.info/xmltojson/#.UXli2it4avc
     """
 
     try:
         api = Trading(config_file=os.path.join("ebay.yaml"), domain="api.sandbox.ebay.com")
-
-        # myitem = {
-        #     "Item": {
-        #
-        #     }
-        # }
-
         api.execute('AddItem', item)
         return dump(api, full=True)
 
@@ -96,19 +101,20 @@ def addItem(item):
 
 
 def make_item_url(response):
-    return "http://sandbox.ebay.com/itm/" + response.ItemID
+    return "http://cgi.sandbox.ebay.com/ws/eBayISAPI.dll?ViewItem&item=" + response.ItemID
 
 
 if __name__ == "__main__":
     print("Trading API Samples for version %s" % ebaysdk.get_version())
     item = Item(
-        title="A  cat dancing on the ground",
-        description="Well, it's dancing",
+        title="a danca the ground",
+        description="Well",
         categoryID="257818",
         price="500.0",
         location="9450 Gilman Drive, La Jolla",
-        picture_url="https://static.boredpanda.com/blog/wp-content/uploads/2018/11/funny-dancing-cats-101-5bf08f6996330__700.jpg",
+        postal_code="10001",
+        picture_url="https://galleryplus.ebayimg.com/ws/web/333535832003_4_0_1/225x225.jpg",
     )
-    response = addItem(item.build_item())
+    response = add_item(item.build_item())
     if response:
         print (make_item_url(response))
