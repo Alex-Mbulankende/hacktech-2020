@@ -3,7 +3,7 @@ import { GET_STATS, SET_CAT } from './types';
 export const getStats = (event) => async dispatch => {
   return new Promise( async (resolve, reject) => {
     try {
-      const response = await fetch('https://9b05b6f5.ngrok.io/magic/insight', {
+      const response = await fetch('http://35.232.236.97:3000/magic/insight', {
         method: 'GET',
         headers: {
           Accept: 'application/json',

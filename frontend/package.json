@@ -58,5 +58,5 @@
   "devDependencies": {
     "@types/react-typist": "^2.0.1"
   },
-  "proxy" : "http://9b05b6f5.ngrok.io/"
+  "proxy" : "http://35.232.236.97:3000"
 }
