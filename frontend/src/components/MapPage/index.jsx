@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Map from '../Map';
 import NavBar from '../NavBar';
 import NewItemForm from '../NewItemForm';
 import Analytics from '../Analytics';
+import Map from '../../containers/Map';
 import './style.less';
 
 const MapPage = props => {

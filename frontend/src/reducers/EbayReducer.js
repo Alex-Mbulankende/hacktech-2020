@@ -1,7 +1,10 @@
 import { GET_LISTINGS } from '../actions/types';
 
 const initialState = {
-  listings: []
+  masks: [],
+  handSanitizer: [],
+  camping: [],
+  medicine: []
 };
 
 const EbayReducer = (state = initialState, action) => {
@@ -9,7 +12,10 @@ const EbayReducer = (state = initialState, action) => {
     case GET_LISTINGS:
       return {
         ...state,
-        listings: action.listings
+        masks: action.masks,
+        handSanitizer: action.handSanitizer,
+        camping: action.camping,
+        medicine: action.medicine
       }
     default:
       return state;

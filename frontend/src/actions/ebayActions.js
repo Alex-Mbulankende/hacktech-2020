@@ -17,7 +17,10 @@ export const getListings = (event) => async dispatch => {
       console.log(data);
       dispatch({
         type: GET_LISTINGS,
-        listings: data.itemSummaries
+        masks : data[0],
+        handSanitizer: data[1],
+        camping : data[2],
+        medicine : data[3]
       })
       resolve(event);
     } catch (error) {
