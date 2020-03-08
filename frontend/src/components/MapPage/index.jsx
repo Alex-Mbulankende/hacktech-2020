@@ -5,12 +5,12 @@ import NavBar from '../NavBar';
 import NewItemForm from '../NewItemForm';
 import './style.less';
 
-const MapPage = () => {
+const MapPage = props => {
   return (
     <div className="map-page">
-      <NavBar />
+      <NavBar setVis={() => props.setVis(true)} />
       <Map />
-      <NewItemForm />
+      <NewItemForm vis={props.vis} setVis={() => props.setVis(false)} />
     </div>
   );
 };

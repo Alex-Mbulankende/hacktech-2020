@@ -32,7 +32,11 @@
     "typescript": "~3.7.2"
   },
   "scripts": {
+<<<<<<< HEAD
     "start": "react-app-rewired start",
+=======
+    "start": "cross-env PORT=8080 react-app-rewired start",
+>>>>>>> fb81198a7aaa799fae59c05d846789ac5e0c69f4
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
