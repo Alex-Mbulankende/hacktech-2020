@@ -49,7 +49,7 @@ const NewItemForm = props => {
               onBlur={props.handleBlur}
             />
           </Form.Item>
-          <a href="https://imgur.com/"><h1 className="label">Picture URL</h1></a>
+          <a href="https://imgur.com/upload" target="_blank  "><h1 className="label">Picture URL</h1></a>
           <Form.Item>
             <Input
               name="picture_url"
