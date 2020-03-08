@@ -1,7 +1,7 @@
 const express = require('express');
 const firebase = require('firebase')
 const utils = require("../../seed/utils")
-
+const request = require("request");
 const app = firebase.initializeApp(utils.firebaseConfig)
 const router = express.Router();
 
@@ -24,7 +24,34 @@ router.get('/listings', async function(req, res, next) {
     res.send(data)
 });
 
+router.get("/wtf", async function(req, res) {
+    let title = req.query.title || "Hand Sanatizer";
+    let description = req.query.description || "Use this to protect yourself from the coronavirus!";
+    let categoryID = req.query.categoryID || categoryNames.handSanitizer;
+    let price = req.query.price || "3";
+    let location = req.query.location || "8223 Stage Coach Place";
+    let postal_code = req.query.postal_code || "92129";
+    let picture_url = req.query.picture_url || "https://static.grainger.com/rp/s/is/image/Grainger/38CC09_AS01?$mdmain$";
+    let country = req.query.country || "US";
+    let currency = req.query.currency || "USD";
+    let is_new = req.query.is_new || "True";
+    let itemId = req.query.itemId // required
 
+    firebase.database().ref(`listings/${itemId}`).set({
+        title: title,
+        description: description,
+        categoryID: categoryID,
+        postal_code: postal_code,
+        price: price,
+        location: location,
+        picture_url: picture_url,
+        country: country,
+        currency: currency,
+        is_new: is_new
+    })
+
+    res.send(itemId)
+})
 async function getOAuthToken(eBay) {
     try {
         let token = await eBay.application.getOAuthToken({
@@ -59,11 +86,7 @@ let nameForNumber = {
 async function searchByZipCode(eBay, country="US", zipcode=92129, radius=30, unit="mi", limit=3){
     // debugger
     categories = [categoryNames.masks, categoryNames.handSanitizer, categoryNames.camping, categoryNames.medicine];
-    var data = {
-        category_ids: "220",
-        filter: (`pickupCountry:${country},pickupPostalCode:${zipcode},pickupRadius:${radius},pickupRadiusUnit:${unit},deliveryOptions:{SELLER_ARRANGED_LOCAL_PICKUP}`),
-        limit: `${limit}`
-    };
+    
     try {
         let status = {}
         let catFunc = function(catId) {
@@ -76,16 +99,23 @@ async function searchByZipCode(eBay, country="US", zipcode=92129, radius=30, uni
                 };
                 let response = await eBay.browse.search(data);
                 status[catId] = response.total
-                let result = [];
-                // await Promise.all(response.itemSummaries.map(item => {
-                //     return async function() {
-                //         let id = item.itemId;
-                //         let itemData = await eBay.browse.getItem(id);
-                //         result.push(itemData)
-                //     }
-                // }))
-                
-                return response;
+                let allData = [];
+
+                if (response.total > 0) {
+                    for await (const item of response.itemSummaries) {
+                        let id = item.itemId;
+                        let data = await firebase.database().ref(`/listings/${id}`).once('value').then(async function(snapshot) {
+                            const result = await snapshot.val()
+                            return result || id
+                        })
+                        console.log(data)
+                        allData.push(data)
+                    }
+                    console.log(allData)
+                    return allData;
+                } else {
+                    return []
+                }
             }
         }
         let results = await Promise.all(categories.map(catId => catFunc(catId)()));
@@ -93,8 +123,9 @@ async function searchByZipCode(eBay, country="US", zipcode=92129, radius=30, uni
         // var response = await eBay.browse.search(data);
         categories.forEach(cat => {
             firebase.database().ref(`zipcodes/${zipcode}`).child(nameForNumber[cat]).set(status[cat]/10)
-            console.log(`${nameForNumber[cat]} -> ${status[cat]}`)
+            // console.log(`${nameForNumber[cat]} -> ${status[cat]}`)
         })
+        // console.log(results)
         return results
     } catch (error) {
         console.log('error ', error);
@@ -118,4 +149,90 @@ router.get("/insight", async (req, res, next) => {
         res.send(result)
       }
 })
+
+router.get("/addItem", async (req, res, next) => {
+    console.log(req.query)
+    let title = req.query.title || "Hand Sanatizer";
+    let description = req.query.description || "Use this to protect yourself from the coronavirus!";
+    let categoryID = req.query.categoryID || categoryNames.handSanitizer;
+    let price = req.query.price || "3";
+    let location = req.query.location || "8223 Stage Coach Place";
+    let postal_code = req.query.postal_code || "92129";
+    let picture_url = req.query.picture_url || "https://static.grainger.com/rp/s/is/image/Grainger/38CC09_AS01?$mdmain$";
+    let country = req.query.country || "US";
+    let currency = req.query.currency || "USD";
+    let is_new = req.query.is_new || "True";
+
+    console.log(title)
+    
+
+    addItem(title,
+    description,
+    categoryID,
+    price,
+    location,
+    postal_code,
+    picture_url,
+    country,
+    currency,
+    is_new).then(success => {
+        res.status(200)
+        res.send(success)
+    }).catch(({err, response, body}) => {
+        res.status(400)
+        res.send(response)
+    })
+})
+
+function addItem(title,
+    description,
+    categoryID,
+    price,
+    location,
+    postal_code,
+    picture_url,
+    country,
+    currency,
+    is_new) {
+    return new Promise((resolve, reject) => {
+
+        request.post({
+            url: 'http://35.232.236.97/additem',
+            body: {
+                "title": title,
+                "description": description,
+                "categoryID": categoryID,
+                "price": price,
+                "location": location,
+                "postal_code": postal_code,
+                "picture_url": picture_url,
+                "country": country,
+                "currency": currency,
+                "is_new": is_new
+            },
+            json: true
+        }, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                // add to firebase too
+                let itemId = body.body.split("=").pop()
+                firebase.database().ref(`listings/v1|${itemId}|0`).set({
+                    title: title,
+                    description: description,
+                    categoryID: categoryID,
+                    postal_code: postal_code,
+                    price: price,
+                    location: location,
+                    picture_url: picture_url,
+                    country: country,
+                    currency: currency,
+                    is_new: is_new
+                })
+                resolve(body);
+            } else {
+                reject({error: error, response: response, body: body})
+            }
+        });
+    })    
+}
+
 module.exports = router;
