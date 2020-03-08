@@ -2,11 +2,13 @@ import React from 'react';
 
 import './style.less';
 
-import { Form, Input, Modal, Progress } from 'antd';
+import { Button, Form, Input, Modal, Progress } from 'antd';
+
+const { TextArea } = Input;
 
 const NewItemForm = props => {
   return (
-    <Modal visible={true} onOk={props.handleOk} onCancel={props.handleCancel}>
+    <Modal visible={props.vis} onOk={props.handleOk} onCancel={props.setVis}>
       <h1 className="newlist">List New Item</h1>
       <div className="circles">
         <div className="item">
@@ -106,7 +108,7 @@ const NewItemForm = props => {
           </Form.Item>
           <h1 className="label">Description</h1>
           <Form.Item>
-            <Input
+            <TextArea
               name="title"
               className="input-box"
               value={props.values}
@@ -114,6 +116,9 @@ const NewItemForm = props => {
               onBlur={props.handleBlur}
             />
           </Form.Item>
+          <Button className="login-button">
+            Submit
+          </Button>
         </form>
       </div>
     </Modal>

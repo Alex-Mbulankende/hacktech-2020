@@ -5,7 +5,7 @@ import './style.less';
 
 import logo from '../../assets/logo.svg';
 
-const NavBar = () => {
+const NavBar = props => {
   return (
     <nav className="navbar-horizontal">
       <NavLink className="title" to="/">
@@ -14,16 +14,18 @@ const NavBar = () => {
       </NavLink>
       <div className="links">
         <NavLink activeClassName="selected" to="/donate">
-          DONATE
+          <div className="popmodal">DONATE</div>
         </NavLink>
-        <NavLink activeClassName="selected" to="/create">
-          CREATE LISTING
-        </NavLink>
+        <div className="popmodal" onClick={props.setVis}>
+          <div className="popmodal">
+            <div className="text">CREATE LISTING</div>
+          </div>
+        </div>
         <NavLink activeClassName="selected" to="/analytics">
-          ANALYTICS
+          <div className="popmodal">ANALYTICS</div>
         </NavLink>
         <NavLink activeClassName="selected" to="/profile">
-          PROFILE
+          <div className="popmodal">PROFILE</div>
         </NavLink>
       </div>
     </nav>
